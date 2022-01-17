@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { ethers } from 'ethers';
+import { ethers, Transaction } from 'ethers';
 
 import { contractABI, contractAddress } from "../utils/constants";
 
@@ -21,6 +21,7 @@ interface TransactionContextInterface {
   setFormData: (c: FormDataTypes) => void,
   handleChange: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
   sendTransaction: () => void;
+  // transactions: Transaction
 }
 
 type FormDataTypes = {
@@ -143,7 +144,7 @@ export const TransactionProvider = ({ children }: ContextProviderProps) => {
   }, [])
 
   return (
-    <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction }}>
+    <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, }}>
       { children }
     </TransactionContext.Provider>
   )
