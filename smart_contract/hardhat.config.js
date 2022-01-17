@@ -1,13 +1,14 @@
 //https://eth-ropsten.alchemyapi.io/v2/iFiuMdgXlelNfqOpma2sfI_mcJZduT2T
 
-require("@nomiclabs/hardhat-waffle")
+require("@nomiclabs/hardhat-waffle");
+const accessEnv = require('./helpers')
 
 module.exports = {
   solidity: '0.8.0',
   networks: {
     ropsten: {
-      url: 'https://eth-ropsten.alchemyapi.io/v2/iFiuMdgXlelNfqOpma2sfI_mcJZduT2T',
-      accounts: ['6c445fc3931164ea14fa3790606401afd43455c48bfa0f510ca3ff33e73e25dd']
+      url: accessEnv('ALCHEMY_HTTP_APP_KEY'),
+      accounts: [accessEnv('METAMASK_ACCOUNT_PRIVATE_KEY')]
     }
   }
 }
