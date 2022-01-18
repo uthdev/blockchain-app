@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
-import { ethers, Transaction } from 'ethers';
+import { ethers } from 'ethers';
 
 import { contractABI, contractAddress } from "../utils/constants";
 
@@ -21,7 +21,18 @@ interface TransactionContextInterface {
   setFormData: (c: FormDataTypes) => void,
   handleChange: (e: ChangeEvent<HTMLInputElement>, name: string) => void;
   sendTransaction: () => void;
-  // transactions: Transaction
+  transactions: Transaction[],
+  isLoading: boolean,
+}
+
+export interface Transaction {
+  addressTo: string;
+  addressFrom: string;
+  timestamp: string | number;
+  message: string;
+  keyword: string;
+  amount: string;
+  url: string;
 }
 
 type FormDataTypes = {
@@ -54,7 +65,7 @@ export const TransactionProvider = ({ children }: ContextProviderProps) => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount")); 
-  const [transactions, setTransactions] = useState([])
+  const [transactions, setTransactions] = useState([] as Transaction[])
 
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, name: string) => {
@@ -71,7 +82,7 @@ export const TransactionProvider = ({ children }: ContextProviderProps) => {
       
       const availableTransactions = await transactionContract.getAllTransactions();
 
-      const structuredTransactions = availableTransactions.map((transaction: Record<string, any>) => ({
+      const structuredTransactions: Transaction[] = availableTransactions.map((transaction: Record<string, any>) => ({
         addressTo: transaction.receiver,
         addressFrom: transaction.sender,
         timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
@@ -168,6 +179,8 @@ export const TransactionProvider = ({ children }: ContextProviderProps) => {
     
     const transactionCount = await transactionContract.getTransactionCount();
     setTransactionCount(transactionCount.toNumber());
+
+    window.location.reload();
     } catch (error) {
       console.log(error);
       
@@ -183,7 +196,7 @@ export const TransactionProvider = ({ children }: ContextProviderProps) => {
   }, [])
 
   return (
-    <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, }}>
+    <TransactionContext.Provider value={{ connectWallet, connectedAccount, formData, setFormData, handleChange, sendTransaction, transactions, isLoading }}>
       { children }
     </TransactionContext.Provider>
   )

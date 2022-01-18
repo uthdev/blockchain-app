@@ -29,9 +29,8 @@ export const Input = ({ placeholder, name, type, handleChange}: InputProps) => {
 }
 
 
-
 const Welcome = () => {
-  const { connectWallet, connectedAccount, formData, handleChange, sendTransaction } = useContext(TransactionContext)
+  const { connectWallet, connectedAccount, formData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext)
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     const { addressTo, amount, keyword, message } = formData;
@@ -113,7 +112,7 @@ const Welcome = () => {
           
             <div className="h-[1px] w-full bg-gray-400 my-2"/>
             
-             {false ? (
+             {isLoading ? (
                <Loader />
              ) : (
                <button 

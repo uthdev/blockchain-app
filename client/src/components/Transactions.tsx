@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import { TransactionContext } from '../context/TransactionContext'
 
 import dummyData from '../utils/dummyData'
@@ -12,6 +12,7 @@ interface TransactionCardProps {
   keyword: string;
   amount: string;
   url: string;
+  key: number;
 }
 
 const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }: TransactionCardProps) => {
@@ -57,7 +58,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 
 
 const Transactions = () => {
-  const { connectedAccount } = useContext(TransactionContext);
+  const { connectedAccount, transactions } = useContext(TransactionContext);
 
   return (
     <div className="flex w-full justify-center items-center 2xl:px-20 gradient-bg-transactions">
@@ -73,8 +74,8 @@ const Transactions = () => {
         )}
 
         <div className="flex flex-wrap justify-center items-center mt-10">
-          {dummyData.reverse().map((transaction, i) => (
-            <TransactionsCard key={i} {...transaction} />
+        {transactions.reverse().map(({addressTo, addressFrom, timestamp, message, keyword, amount, url}, i) => (
+            <TransactionsCard key={i} addressTo={addressTo} addressFrom={addressFrom} timestamp={timestamp} message={message} keyword={keyword} amount={amount} url={url}  />
           ))}
         </div>
       </div>
